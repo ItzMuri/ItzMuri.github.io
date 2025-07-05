@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Qbox and QB Vehicle Tool Panel</title>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #0f1218;
+    color: #e0e0e0;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 48px auto;
+    padding: 32px 36px;
+    background: linear-gradient(145deg, #1a1c23, #151720);
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgb(0 0 0 / 0.9), inset 0 0 12px rgb(50 50 70 / 0.6);
+  }
+
+  h2 {
+    font-weight: 800;
+    font-size: 2.5rem;
+    letter-spacing: 0.03em;
+    margin-bottom: 36px;
+    color: #64ffda;
+    text-shadow: 0 0 8px #64ffda66;
+    text-align: center;
+  }
+
+  h3 {
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin-bottom: 12px;
+    border-bottom: 2px solid #2de0b6;
+    padding-bottom: 6px;
+    color: #2de0b6;
+  }
+
+  .grid-two-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 28px;
+  }
+
+  .preview-output-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 28px;
+    margin-bottom: 32px;
+  }
+
+  .controls {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-bottom: 36px;
+  }
+  .controls > * {
+    flex: 1 1 190px;
+    min-width: 150px;
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+  }
+  label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #55c8b0;
+    font-size: 0.95rem;
+  }
+
+  input[type="number"],
+  input[type="text"],
+  select {
+    padding: 12px 16px;
+    font-size: 1rem;
+    border-radius: 12px;
+    border: 2px solid #233240;
+    background-color: #121619;
+    color: #cfd8dc;
+    box-shadow: inset 0 2px 5px rgb(0 0 0 / 0.5);
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    outline-offset: 2px;
+  }
+  input[type="number"]:focus,
+  input[type="text"]:focus,
+  select:focus {
+    border-color: #64ffda;
+    background-color: #1f262f;
+    color: #e0f7fa;
+    outline: none;
+    box-shadow: 0 0 8px #64ffda88, inset 0 0 8px #64ffda55;
+  }
+
+  .toggle-switch {
+    position: relative;
+    width: 140px;
+    height: 44px;
+    background: #1a1f24;
+    border: 2px solid #2a3a4a;
+    border-radius: 22px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    user-select: none;
+    overflow: hidden;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
+  }
+
+  .toggle-switch input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 3;
+  }
+
+  .toggle-label {
+    position: relative;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    z-index: 2;
+  }
+
+  .toggle-label.qb {
+    color: hsl(0, 0%, 0%);
+  }
+
+  .toggle-label.qbox {
+    color: hsl(0, 0%, 0%);
+  }
+
+  .toggle-switch .slider {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    background: #64ffda;
+    left: 0;
+    transition: all 0.3s ease;
+    z-index: 1;
+    border-radius: 18px;
+    margin: 2px;
+  }
+
+  #format-toggle:checked ~ .slider {
+    left: 50%;
+  }
+
+  #format-toggle:checked ~ .toggle-label.qb {
+    color: #d4000b;
+  }
+
+  #format-toggle:not(:checked) ~ .toggle-label.qbox {
+    color: #ffee00;
+  }
+
+  button {
+    all: unset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 12px 24px;
+    border: #00ffa8 solid 0.15em;
+    border-radius: 0.75em;
+    color: #00ffa8;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    overflow: hidden;
+    transition: border 300ms ease, color 300ms ease;
+    user-select: none;
+    min-width: 180px;
+    height: 48px;
+    box-sizing: border-box;
+  }
+
+  button:focus-visible {
+    outline: 2px solid #00ffa8;
+    outline-offset: 4px;
+  }
+  
+  .button-container {
+    flex: 1 1 190px;
+    min-width: 180px;
+    position: relative;
+  }
+
+  button:hover {
+    color: #ffffff;
+  }
+
+  button:active {
+    border-color: #00996a;
+  }
+
+  button::before,
+  button::after {
+    content: "";
+    position: absolute;
+    width: 8.5em;
+    aspect-ratio: 1;
+    background: #00ffa8;
+    opacity: 0.5;
+    border-radius: 50%;
+    transition: transform 500ms ease, background 300ms ease;
+  }
+
+  button::before {
+    left: 0;
+    transform: translateX(-8em);
+  }
+
+  button::after {
+    right: 0;
+    transform: translateX(8em);
+  }
+
+  button:hover::before {
+    transform: translateX(-1em);
+  }
+
+  button:hover::after {
+    transform: translateX(1em);
+  }
+
+  button:active::before,
+  button:active::after {
+    background: #00996a;
+  }
+
+  button:disabled {
+    color: #555a61;
+    border-color: #333;
+    cursor: not-allowed;
+  }
+
+  button:disabled::before,
+  button:disabled::after {
+    display: none;
+  }
+
+  .vehicle-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #64ffda;
+    color: #0f1218;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+
+  .select-folder-container {
+    position: relative;
+    display: inline-block;
+  }
+
+  .table-container {
+    background: #192735;
+    border-radius: 8px;
+    box-shadow: 0 3px 6px rgb(0 0 0 / 0.5);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 6px;
+    font-size: 0.9rem;
+  }
+  
+  thead tr th {
+    background-color: #152a3a;
+    color: #3dd598;
+    font-weight: 600;
+    padding: 10px 12px;
+    user-select: none;
+    text-align: left;
+  }
+  
+  tbody tr {
+    background-color: #192735;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 0.5);
+    transition: background-color 0.25s ease;
+  }
+  
+  tbody tr:hover {
+    background-color: #244352;
+  }
+  
+  tbody tr td {
+    padding: 8px 12px;
+    color: #ffffff;
+    border-bottom: 1px solid #244352;
+    text-align: center;
+  }
+
+  .output-container {
+    background-color: #141a20;
+    border-radius: 12px;
+    box-shadow: inset 0 0 14px rgb(97 239 206 / 0.4);
+  }
+
+  pre {
+    background-color: transparent;
+    padding: 12px 16px;
+    font-family: 'Fira Code', monospace, monospace;
+    font-size: 0.9rem;
+    color: #61efce;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 800px) {
+    .container {
+      padding: 24px;
+      margin: 24px auto;
+    }
+    
+    .preview-output-container {
+      grid-template-columns: 1fr;
+    }
+    
+    .grid-two-columns {
+      grid-template-columns: 1fr;
+    }
+    
+    .controls {
+      flex-direction: column;
+    }
+    
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 24px;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h2>Qbox and QB Vehicle Tool Panel</h2>
+
+    <section class="section" aria-label="Controls">
+      <h3>Controls</h3>
+      <div class="controls">
+        <div class="select-folder-container">
+          <button id="select-folder">Select Vehicle Folder</button>
+          <div id="vehicle-count" class="vehicle-count" style="display: none;">0</div>
+        </div>
+
+        <div class="input-group" style="flex: 1 1 140px; margin-bottom: 0;">
+          <label for="format-toggle">Export Format</label>
+          <div class="toggle-switch">
+            <input type="checkbox" id="format-toggle" aria-label="Toggle export format" />
+            <span class="slider"></span>
+            <span class="toggle-label qb">QB</span>
+            <span class="toggle-label qbox">QBOX</span>
+          </div>
+        </div>
+
+        <button id="export-file" disabled>Export to Lua</button>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3>Default Settings</h3>
+      <div class="grid-two-columns">
+        <div class="input-group">
+          <label for="default-price">Default Price</label>
+          <input type="number" id="default-price" value="100000" min="0" step="1000" />
+        </div>
+        <div class="input-group">
+          <label for="default-category">Default Category</label>
+          <input type="text" id="default-category" value="super" />
+        </div>
+        <div class="input-group">
+          <label for="default-type">Default Type</label>
+          <input type="text" id="default-type" value="automobile" />
+        </div>
+        <div class="input-group">
+          <label for="default-shop">Default Shop</label>
+          <input type="text" id="default-shop" value="pdm" />
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="preview-output-container">
+        <div>
+          <h3>Vehicle Preview <span id="vehicle-count-text" style="font-size: 0.8em; color: #64ffda;"></span></h3>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr><th>Model</th></tr>
+              </thead>
+              <tbody id="vehicle-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div>
+          <h3>Lua Output</h3>
+          <div class="output-container">
+            <pre id="output" aria-live="polite" aria-atomic="true"></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const vehiclesData = [];
+    const output = document.getElementById("output");
+    const exportButton = document.getElementById("export-file");
+    const vehicleTableBody = document.getElementById("vehicle-table-body");
+    const vehicleCountBadge = document.getElementById("vehicle-count");
+    const vehicleCountText = document.getElementById("vehicle-count-text");
+
+    const defaultPrice = document.getElementById("default-price");
+    const defaultCategory = document.getElementById("default-category");
+    const defaultType = document.getElementById("default-type");
+    const defaultShop = document.getElementById("default-shop");
+
+    function capitalize(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    }
+
+    function safeLuaKey(key) {
+        return /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(key) ? key : `['${key}']`;
+    }
+
+    function updateVehicleCount() {
+        const count = vehiclesData.length;
+        vehicleCountBadge.textContent = count;
+        vehicleCountText.textContent = count > 0 ? `(${count} vehicles loaded)` : "";
+        
+        if (count > 0) {
+            vehicleCountBadge.style.display = "flex";
+        } else {
+            vehicleCountBadge.style.display = "none";
+        }
+    }
+
+    [defaultPrice, defaultCategory, defaultType, defaultShop].forEach(input => {
+        input.addEventListener("input", () => {
+            updateVehicleData();
+            refreshPreviewTable();
+        });
+    });
+
+    document.getElementById("select-folder").addEventListener("click", async () => {
+        vehiclesData.length = 0;
+        vehicleTableBody.innerHTML = "";
+
+        try {
+            const dirHandle = await window.showDirectoryPicker();
+            await processFolder(dirHandle);
+
+            exportButton.disabled = vehiclesData.length === 0;
+            updateVehicleCount();
+            alert(`${vehiclesData.length} vehicles loaded.`);
+        } catch (e) {
+            console.error(e);
+            if (e.name !== 'AbortError') {
+                alert("Folder selection was canceled or failed.");
+            }
+        }
+    });
+
+    async function processFolder(dirHandle) {
+        for await (const entry of dirHandle.values()) {
+            if (entry.kind === 'file' && entry.name.match(/vehicles?.meta/i)) {
+                const file = await entry.getFile();
+                const content = await file.text();
+
+                const models = [...content.matchAll(/<modelName>(.*?)<\/modelName>/g)].map(m => m[1]);
+                const brands = [...content.matchAll(/<vehicleMakeName>(.*?)<\/vehicleMakeName>/g)].map(m => m[1] || 'UNKNOWN');
+                const gameNames = [...content.matchAll(/<gameName>(.*?)<\/gameName>/g)].map(m => m[1]);
+
+                models.forEach((model, index) => {
+                    const vehicle = {
+                        model,
+                        brand: capitalize(brands[index] || 'UNKNOWN'),
+                        name: gameNames[index] || model,
+                        price: parseInt(defaultPrice.value),
+                        category: defaultCategory.value,
+                        type: defaultType.value,
+                        shop: defaultShop.value
+                    };
+                    vehiclesData.push(vehicle);
+                });
+
+                refreshPreviewTable();
+                updateVehicleCount();
+            } else if (entry.kind === 'directory') {
+                await processFolder(entry);
+            }
+        }
+    }
+
+    function refreshPreviewTable() {
+        vehicleTableBody.innerHTML = "";
+        vehiclesData.forEach(vehicle => {
+            const row = document.createElement("tr");
+            row.innerHTML = `<td>${vehicle.model}</td>`;
+            vehicleTableBody.appendChild(row);
+        });
+    }
+
+    function updateVehicleData() {
+        vehiclesData.forEach(vehicle => {
+            vehicle.price = parseInt(defaultPrice.value);
+            vehicle.category = defaultCategory.value;
+            vehicle.type = defaultType.value;
+            vehicle.shop = defaultShop.value;
+        });
+    }
+
+    exportButton.addEventListener("click", () => {
+        if (vehiclesData.length === 0) {
+            alert("No vehicle data to export.");
+            return;
+        }
+
+        const formatToggle = document.getElementById("format-toggle");
+        const format = formatToggle.checked ? "qbox" : "qb";
+        let luaOutput = "Vehicles = {\n";
+
+        vehiclesData.forEach(vehicle => {
+            if (format === "qbox") {
+                luaOutput += `    ${safeLuaKey(vehicle.model)} = { \n`;
+                luaOutput += `        name = '${vehicle.name}',\n`;
+                luaOutput += `        brand = '${vehicle.brand}',\n`;
+                luaOutput += `        model = '${vehicle.model}',\n`;
+                luaOutput += `        price = ${vehicle.price},\n`;
+                luaOutput += `        category = '${vehicle.category}',\n`;
+                luaOutput += `        type = '${vehicle.type}',\n`;
+                luaOutput += `        hash = \`${vehicle.model}\`,\n`;
+                luaOutput += `    },\n`;
+            } else {
+                luaOutput += `    { model = '${vehicle.model}', name = '${vehicle.name}', brand = '${vehicle.brand}', price = ${vehicle.price}, category = '${vehicle.category}', type = '${vehicle.type}', shop = '${vehicle.shop}' },\n`;
+            }
+        });
+
+        luaOutput += "}\n\nreturn Vehicles";
+        output.textContent = luaOutput;
+
+        const blob = new Blob([luaOutput], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = format === "qbox" ? "vehicles_qbox.lua" : "vehicles_qb.lua";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>
