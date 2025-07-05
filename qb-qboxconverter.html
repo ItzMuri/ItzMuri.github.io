@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Qbox and QB Vehicle Tool Panel ItzMuri</title>
+<title>Qbox and QB Vehicle Tool Panel</title>
 <style>
   * {
     box-sizing: border-box;
   }
   body {
-    margin: 0;
+    
     font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: #0f1218;
     color: #e0e0e0;
@@ -19,9 +19,8 @@
   }
 
   .container {
-    max-width: 1100px;
-    margin: 48px auto;
-    padding: 32px 36px;
+   height: 100%;
+    padding: 50px;
     background: linear-gradient(145deg, #1a1c23, #151720);
     border-radius: 16px;
     box-shadow: 0 8px 24px rgb(0 0 0 / 0.9), inset 0 0 12px rgb(50 50 70 / 0.6);
@@ -49,6 +48,12 @@
   .grid-two-columns {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 28px;
+  }
+
+  .grid-three-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 28px;
   }
 
@@ -285,6 +290,8 @@
     background: #192735;
     border-radius: 8px;
     box-shadow: 0 3px 6px rgb(0 0 0 / 0.5);
+    max-height: 400px;
+    overflow-y: auto;
   }
 
   table {
@@ -301,6 +308,9 @@
     padding: 10px 12px;
     user-select: none;
     text-align: left;
+    position: sticky;
+    top: 0;
+    z-index: 10;
   }
   
   tbody tr {
@@ -325,6 +335,8 @@
     background-color: #141a20;
     border-radius: 12px;
     box-shadow: inset 0 0 14px rgb(97 239 206 / 0.4);
+    max-height: 400px;
+    overflow-y: auto;
   }
 
   pre {
@@ -339,16 +351,23 @@
     line-height: 1.5;
   }
 
- #click-notification {
-  background-color: #064f44;
-  border: 2px solid #64ffda;
-  border-radius: 12px;
-  padding: 12px 16px;
-  font-size: 1.1rem;
-  box-shadow: 0 0 12px #64ffdaaa;
-  transition: opacity 0.4s ease;
-  user-select: none;
-}
+  .error-message {
+    background-color: #d32f2f;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    margin: 16px 0;
+    display: none;
+  }
+
+  .success-message {
+    background-color: #388e3c;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    margin: 16px 0;
+    display: none;
+  }
 
   @media (max-width: 800px) {
     .container {
@@ -363,6 +382,10 @@
     .grid-two-columns {
       grid-template-columns: 1fr;
     }
+
+    .grid-three-columns {
+      grid-template-columns: 1fr;
+    }
     
     .controls {
       flex-direction: column;
@@ -373,13 +396,40 @@
       margin-bottom: 24px;
     }
   }
+  .input-group label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 </style>
 </head>
 <body>
   <div class="container">
-    <h2>Qbox and QB Vehicle Tool Panel ItzMuri</h2>
-      
+    <h2>Qbox and QB Vehicle Tool Panel</h2>
 
+    <div id="error-message" class="error-message"></div>
+    <div id="success-message" class="success-message"></div>
+
+    <section class="section" aria-label="Support">
+      <h3>Support Me</h3>
+      <div style="text-align:center; margin-bottom: 24px;">
+        <a href="https://www.paypal.com/paypalme/murtazaakbari20" target="_blank" rel="noopener noreferrer" 
+          style="
+            display: inline-block;
+            background-color: #64ffda;
+            color: #0f1218;
+            font-weight: 700;
+            padding: 12px 24px;
+            border-radius: 12px;
+            text-decoration: none;
+            box-shadow: 0 0 8px #64ffdaaa;
+            transition: background-color 0.3s ease;
+          "
+          onmouseover="this.style.backgroundColor='#38b89d'" onmouseout="this.style.backgroundColor='#64ffda'">
+          💖 Buy me a Cafe  ☕
+        </a>
+      </div>
+    </section>
 
     <section class="section" aria-label="Controls">
       <h3>Controls</h3>
@@ -405,22 +455,39 @@
 
     <section class="section">
       <h3>Default Settings</h3>
-      <div class="grid-two-columns">
+      <div class="grid-three-columns">
         <div class="input-group">
           <label for="default-price">Default Price</label>
           <input type="number" id="default-price" value="100000" min="0" step="1000" />
         </div>
+
         <div class="input-group">
           <label for="default-category">Default Category</label>
           <input type="text" id="default-category" value="super" />
         </div>
+
         <div class="input-group">
           <label for="default-type">Default Type</label>
           <input type="text" id="default-type" value="automobile" />
         </div>
+
         <div class="input-group">
           <label for="default-shop">Default Shop</label>
           <input type="text" id="default-shop" value="pdm" />
+        </div>
+
+        <div class="input-group">
+          <label for="default-class">Class System used for boosting</label>
+          <select id="default-class">
+            <option value="" disabled selected hidden>Select a class</option>
+            <option value="S+">S+</option>
+            <option value="S">S</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+          </select>
+          <label><input type="checkbox" id="include-class" />Include Class</label>
         </div>
       </div>
     </section>
@@ -432,9 +499,11 @@
           <div class="table-container">
             <table>
               <thead>
-                <tr><th>Model</th></tr>
+                <tr><th>Model</th><th>Name</th><th>Brand</th><th>Class</th></tr>
               </thead>
-              <tbody id="vehicle-table-body"></tbody>
+              <tbody id="vehicle-table-body">
+                <tr><td colspan="4" style="text-align: center; color: #999; font-style: italic;">No vehicles loaded</td></tr>
+              </tbody>
             </table>
           </div>
         </div>
@@ -442,7 +511,7 @@
         <div>
           <h3>Lua Output</h3>
           <div class="output-container">
-            <pre id="output" aria-live="polite" aria-atomic="true"></pre>
+            <pre id="output" aria-live="polite" aria-atomic="true">-- Select a vehicle folder to generate Lua output</pre>
           </div>
         </div>
       </div>
@@ -456,141 +525,210 @@
     const vehicleTableBody = document.getElementById("vehicle-table-body");
     const vehicleCountBadge = document.getElementById("vehicle-count");
     const vehicleCountText = document.getElementById("vehicle-count-text");
+    const errorMessage = document.getElementById("error-message");
+    const successMessage = document.getElementById("success-message");
 
     const defaultPrice = document.getElementById("default-price");
     const defaultCategory = document.getElementById("default-category");
     const defaultType = document.getElementById("default-type");
     const defaultShop = document.getElementById("default-shop");
-    
+    const defaultClass = document.getElementById("default-class");
+    const includeClass = document.getElementById("include-class");
 
+    const vehicleClasses = { "S+": "S+", S: "S", A: "A", B: "B", C: "C", D: "D" };
+
+    function showError(message) {
+      errorMessage.textContent = message;
+      errorMessage.style.display = 'block';
+      successMessage.style.display = 'none';
+      setTimeout(() => {
+        errorMessage.style.display = 'none';
+      }, 5000);
+    }
+
+    function showSuccess(message) {
+      successMessage.textContent = message;
+      successMessage.style.display = 'block';
+      errorMessage.style.display = 'none';
+      setTimeout(() => {
+        successMessage.style.display = 'none';
+      }, 3000);
+    }
 
     function capitalize(str) {
-        return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+      return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
     }
 
     function safeLuaKey(key) {
-        return /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(key) ? key : `['${key}']`;
+      return /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(key) ? key : `['${key}']`;
     }
 
     function updateVehicleCount() {
-        const count = vehiclesData.length;
-        vehicleCountBadge.textContent = count;
-        vehicleCountText.textContent = count > 0 ? `(${count} vehicles loaded)` : "";
-        
-        if (count > 0) {
-            vehicleCountBadge.style.display = "flex";
-        } else {
-            vehicleCountBadge.style.display = "none";
-        }
-    }
-
-    [defaultPrice, defaultCategory, defaultType, defaultShop].forEach(input => {
-        input.addEventListener("input", () => {
-            updateVehicleData();
-            refreshPreviewTable();
-        });
-    });
-
-    document.getElementById("select-folder").addEventListener("click", async () => {
-        vehiclesData.length = 0;
-        vehicleTableBody.innerHTML = "";
-
-        try {
-            const dirHandle = await window.showDirectoryPicker();
-            await processFolder(dirHandle);
-
-            exportButton.disabled = vehiclesData.length === 0;
-            updateVehicleCount();
-            alert(`${vehiclesData.length} vehicles loaded.`);
-        } catch (e) {
-            console.error(e);
-            if (e.name !== 'AbortError') {
-                alert("Folder selection was canceled or failed.");
-            }
-        }
-    });
-
-    async function processFolder(dirHandle) {
-        for await (const entry of dirHandle.values()) {
-            if (entry.kind === 'file' && entry.name.match(/vehicles?.meta/i)) {
-                const file = await entry.getFile();
-                const content = await file.text();
-
-                const models = [...content.matchAll(/<modelName>(.*?)<\/modelName>/g)].map(m => m[1]);
-                const brands = [...content.matchAll(/<vehicleMakeName>(.*?)<\/vehicleMakeName>/g)].map(m => m[1] || 'UNKNOWN');
-                const gameNames = [...content.matchAll(/<gameName>(.*?)<\/gameName>/g)].map(m => m[1]);
-
-                models.forEach((model, index) => {
-                    const vehicle = {
-                        model,
-                        brand: capitalize(brands[index] || 'UNKNOWN'),
-                        name: gameNames[index] || model,
-                        price: parseInt(defaultPrice.value),
-                        category: defaultCategory.value,
-                        type: defaultType.value,
-                        shop: defaultShop.value
-                    };
-                    vehiclesData.push(vehicle);
-                });
-
-                refreshPreviewTable();
-                updateVehicleCount();
-            } else if (entry.kind === 'directory') {
-                await processFolder(entry);
-            }
-        }
-    }
-
-    function refreshPreviewTable() {
-        vehicleTableBody.innerHTML = "";
-        vehiclesData.forEach(vehicle => {
-            const row = document.createElement("tr");
-            row.innerHTML = `<td>${vehicle.model}</td>`;
-            vehicleTableBody.appendChild(row);
-        });
+      const count = vehiclesData.length;
+      vehicleCountBadge.textContent = count;
+      vehicleCountText.textContent = count > 0 ? `(${count} vehicles loaded)` : "";
+      vehicleCountBadge.style.display = count > 0 ? "flex" : "none";
+      exportButton.disabled = count === 0;
     }
 
     function updateVehicleData() {
-        vehiclesData.forEach(vehicle => {
-            vehicle.price = parseInt(defaultPrice.value);
-            vehicle.category = defaultCategory.value;
-            vehicle.type = defaultType.value;
-            vehicle.shop = defaultShop.value;
-        });
+      vehiclesData.forEach(vehicle => {
+        vehicle.price = parseInt(defaultPrice.value) || 100000;
+        vehicle.category = defaultCategory.value || "super";
+        vehicle.type = defaultType.value || "automobile";
+        vehicle.shop = defaultShop.value || "pdm";
+        vehicle.class = includeClass.checked ? (defaultClass.value || undefined) : undefined;
+      });
+      refreshPreviewTable();
+      generateLuaOutput();
     }
 
-    exportButton.addEventListener("click", () => {
-        if (vehiclesData.length === 0) {
-            alert("No vehicle data to export.");
-            return;
+    function refreshPreviewTable() {
+      vehicleTableBody.innerHTML = "";
+      
+      if (vehiclesData.length === 0) {
+        vehicleTableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #999; font-style: italic;">No vehicles loaded</td></tr>';
+        return;
+      }
+
+      vehiclesData.forEach(vehicle => {
+        const className = vehicle.class || "–";
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${vehicle.model}</td>
+          <td>${vehicle.name}</td>
+          <td>${vehicle.brand}</td>
+          <td>${className}</td>
+        `;
+        vehicleTableBody.appendChild(row);
+      });
+    }
+
+    function generateLuaOutput() {
+      if (vehiclesData.length === 0) {
+        output.textContent = "-- Select a vehicle folder to generate Lua output";
+        return;
+      }
+
+      const format = document.getElementById("format-toggle").checked ? "qbox" : "qb";
+      let luaOutput = "Vehicles = {\n";
+
+      vehiclesData.forEach(vehicle => {
+        if (format === "qbox") {
+          luaOutput += `    ${safeLuaKey(vehicle.model)} = {\n`;
+          luaOutput += `        name = '${vehicle.name}',\n`;
+          luaOutput += `        brand = '${vehicle.brand}',\n`;
+          luaOutput += `        model = '${vehicle.model}',\n`;
+          luaOutput += `        price = ${vehicle.price},\n`;
+          luaOutput += `        category = '${vehicle.category}',\n`;
+          luaOutput += `        type = '${vehicle.type}',\n`;
+          luaOutput += `        hash = \`${vehicle.model}\`,\n`;
+          if (vehicle.class) {
+            luaOutput += `        class = '${vehicle.class}',\n`;
+          }
+          luaOutput += `    },\n`;
+        } else {
+          // QB format
+          let line = `    { model = '${vehicle.model}', name = '${vehicle.name}', brand = '${vehicle.brand}', price = ${vehicle.price}, category = '${vehicle.category}', type = '${vehicle.type}', shop = '${vehicle.shop}'`;
+          if (vehicle.class) {
+            line += `, class = '${vehicle.class}'`;
+          }
+          line += ` },\n`;
+          luaOutput += line;
+        }
+      });
+
+      luaOutput += "}\n\nreturn Vehicles";
+      output.textContent = luaOutput;
+    }
+
+    // Add event listeners for all inputs
+    [defaultPrice, defaultCategory, defaultType, defaultShop, defaultClass, includeClass].forEach(input => {
+      input.addEventListener("input", updateVehicleData);
+      input.addEventListener("change", updateVehicleData);
+    });
+
+    // Add event listener for format toggle
+    document.getElementById("format-toggle").addEventListener("change", generateLuaOutput);
+
+    document.getElementById("select-folder").addEventListener("click", async () => {
+      try {
+        // Check if the File System Access API is supported
+        if (!window.showDirectoryPicker) {
+          showError("Your browser doesn't support the File System Access API. Please use Chrome, Edge, or another compatible browser.");
+          return;
         }
 
-        const formatToggle = document.getElementById("format-toggle");
-        const format = formatToggle.checked ? "qbox" : "qb";
-        let luaOutput = "Vehicles = {\n";
+        vehiclesData.length = 0;
+        refreshPreviewTable();
+        updateVehicleCount();
 
-        vehiclesData.forEach(vehicle => {
-            if (format === "qbox") {
-                luaOutput += `    ${safeLuaKey(vehicle.model)} = { \n`;
-                luaOutput += `        name = '${vehicle.name}',\n`;
-                luaOutput += `        brand = '${vehicle.brand}',\n`;
-                luaOutput += `        model = '${vehicle.model}',\n`;
-                luaOutput += `        price = ${vehicle.price},\n`;
-                luaOutput += `        category = '${vehicle.category}',\n`;
-                luaOutput += `        type = '${vehicle.type}',\n`;
-                luaOutput += `        hash = \`${vehicle.model}\`,\n`;
-                luaOutput += `    },\n`;
-            } else {
-                luaOutput += `    { model = '${vehicle.model}', name = '${vehicle.name}', brand = '${vehicle.brand}', price = ${vehicle.price}, category = '${vehicle.category}', type = '${vehicle.type}', shop = '${vehicle.shop}' },\n`;
-            }
-        });
+        const dirHandle = await window.showDirectoryPicker();
+        await processFolder(dirHandle);
 
-        luaOutput += "}\n\nreturn Vehicles";
-        output.textContent = luaOutput;
+        updateVehicleCount();
+        generateLuaOutput();
+        
+        if (vehiclesData.length > 0) {
+          showSuccess(`Successfully loaded ${vehiclesData.length} vehicles!`);
+        } else {
+          showError("No vehicle files found in the selected folder.");
+        }
+      } catch (e) {
+        console.error(e);
+        if (e.name === 'AbortError') {
+          // User cancelled, don't show error
+        } else {
+          showError("Failed to process folder: " + e.message);
+        }
+      }
+    });
 
-        const blob = new Blob([luaOutput], { type: 'text/plain' });
+    async function processFolder(dirHandle) {
+      for await (const entry of dirHandle.values()) {
+        if (entry.kind === 'file' && entry.name.match(/vehicles?\.meta$/i)) {
+          try {
+            const file = await entry.getFile();
+            const content = await file.text();
+
+            const models = [...content.matchAll(/<modelName>(.*?)<\/modelName>/g)].map(m => m[1]);
+            const brands = [...content.matchAll(/<vehicleMakeName>(.*?)<\/vehicleMakeName>/g)].map(m => m[1] || 'UNKNOWN');
+            const gameNames = [...content.matchAll(/<gameName>(.*?)<\/gameName>/g)].map(m => m[1]);
+
+            models.forEach((model, index) => {
+              const vehicle = {
+                model: model,
+                brand: capitalize(brands[index] || 'UNKNOWN'),
+                name: gameNames[index] || model,
+                price: parseInt(defaultPrice.value) || 100000,
+                category: defaultCategory.value || "super",
+                type: defaultType.value || "automobile",
+                shop: defaultShop.value || "pdm",
+                class: includeClass.checked ? (defaultClass.value || undefined) : undefined
+              };
+              vehiclesData.push(vehicle);
+            });
+          } catch (error) {
+            console.error(`Error processing file ${entry.name}:`, error);
+          }
+        } else if (entry.kind === 'directory') {
+          await processFolder(entry);
+        }
+      }
+    }
+
+    document.getElementById("export-file").addEventListener("click", () => {
+      if (vehiclesData.length === 0) {
+        showError("No vehicle data to export.");
+        return;
+      }
+
+      try {
+        const format = document.getElementById("format-toggle").checked ? "qbox" : "qb";
+        const luaContent = output.textContent;
+
+        const blob = new Blob([luaContent], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
-
         const a = document.createElement('a');
         a.href = url;
         a.download = format === "qbox" ? "vehicles_qbox.lua" : "vehicles_qb.lua";
@@ -598,7 +736,16 @@
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
+
+        showSuccess(`Successfully exported ${vehiclesData.length} vehicles to ${a.download}`);
+      } catch (error) {
+        showError("Failed to export file: " + error.message);
+      }
     });
+
+    // Initialize
+    updateVehicleCount();
+    generateLuaOutput();
   </script>
 </body>
 </html>
