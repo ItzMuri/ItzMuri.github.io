@@ -378,28 +378,7 @@
 <body>
   <div class="container">
     <h2>Qbox and QB Vehicle Tool Panel ItzMuri</h2>
-      <p style="text-align:center; margin-bottom: 24px; position: relative;">
-     <a href="https://itzmuri.github.io/qb-qboxconverter" id="qbox-link" target="_blank" rel="noopener noreferrer" style="color:#64ffda; text-decoration: underline;">
-       Visit Converter
-     </a>
-   
-     <span id="click-box" style="
-       display:none;
-       position: absolute;
-       top: 24px;
-       left: 50%;
-       transform: translateX(-50%);
-       background-color: #64ffda;
-       color: #0f1218;
-       font-size: 0.8rem;
-       font-weight: 700;
-       padding: 4px 8px;
-       border-radius: 8px;
-       user-select: none;
-       box-shadow: 0 0 6px #64ffdaaa;
-       white-space: nowrap;
-     ">Clicked!</span>
-   </p>
+      
 
 
     <section class="section" aria-label="Controls">
@@ -482,14 +461,7 @@
     const defaultCategory = document.getElementById("default-category");
     const defaultType = document.getElementById("default-type");
     const defaultShop = document.getElementById("default-shop");
-    const clickBox = document.getElementById('click-box');
-document.getElementById('qbox-link').addEventListener('click', () => {
-  clickBox.style.display = 'block';
-
-  setTimeout(() => {
-    clickBox.style.display = 'none';
-  }, 2000); // disappears after 2 seconds
-});
+    
 
 
     function capitalize(str) {
