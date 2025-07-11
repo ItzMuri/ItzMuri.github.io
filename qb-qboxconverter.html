@@ -18,6 +18,25 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+  ::-webkit-scrollbar {
+      width: 0.35rem;
+      border-radius: 2.23rem;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 2.33rem;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background-color: #2debbca6;
+      border-radius: 2.23rem;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: #098a69a6;
+    }
+
   .container {
    height: 100%;
     padding: 50px;
@@ -291,7 +310,9 @@
     border-radius: 8px;
     box-shadow: 0 3px 6px rgb(0 0 0 / 0.5);
     max-height: 400px;
-    overflow-y: auto;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    resize: none;
   }
 
   table {
@@ -336,7 +357,9 @@
     border-radius: 12px;
     box-shadow: inset 0 0 14px rgb(97 239 206 / 0.4);
     max-height: 400px;
-    overflow-y: auto;
+   overflow-x: hidden;
+    overflow-y: scroll;
+  resize: none;
   }
 
   pre {
@@ -515,33 +538,35 @@
           <h3>Lua Output</h3>
           <button id="toggle-edit">✏️ Enable Edit</button>
           <div class="output-container">
-            <textarea id="output" readonly spellcheck="false"
-              placeholder="-- Select a vehicle folder to generate Lua output"
-              style="
-                width: 100%;
-                height: 400px;
-                background:
-                  repeating-linear-gradient(
-                    to bottom,
-                    #141a20,
-                    #141a20 24px,
-                    #1c2229 24px,
-                    #1c2229 25px
-                  );
-                color: #ffffff;
-                font-family: 'Fira Code', monospace;
-                font-size: 14px;
-                padding: 12px 16px;
-                border: none;
-                border-radius: 12px;
-                box-shadow: inset 0 0 14px rgba(97, 239, 206, 0.4);
-                resize: vertical;
-                overflow-y: auto;
-                line-height: 25px;
-                white-space: pre;
-                outline: none;
-              "
-            ></textarea>
+           <textarea id="output" readonly spellcheck="false"
+  placeholder="-- Select a vehicle folder to generate Lua output"
+  style="
+    width: 100%;
+    height: 400px;
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        #141a20,
+        #141a20 24px,
+        #1c2229 24px,
+        #1c2229 25px
+      );
+    color: #ffffff;
+    font-family: 'Fira Code', monospace;
+    font-size: 14px;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 12px;
+    box-shadow: inset 0 0 14px rgba(97, 239, 206, 0.4);
+    overflow-x: hidden;
+    overflow-y: scroll;
+    line-height: 25px;
+    white-space: pre;
+    outline: none;
+    min-height: 100px;
+  "
+></textarea>
+
 
           </div>
         </div>
@@ -747,6 +772,7 @@
         }
       }
     }
+
 
     const editToggleBtn = document.getElementById('toggle-edit');
     const outputArea = document.getElementById('output');
