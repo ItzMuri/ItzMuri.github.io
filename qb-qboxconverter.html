@@ -123,7 +123,7 @@
   select:focus {
     border-color: #64ffda;
     background-color: #1f262f;
-    color: #e0f7fa;
+    color: #ffffff;
     outline: none;
     box-shadow: 0 0 8px #64ffda88, inset 0 0 8px #64ffda55;
   }
@@ -197,91 +197,96 @@
     color: #ffee00;
   }
 
-  button {
-    all: unset;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    padding: 12px 24px;
-    border: #00ffa8 solid 0.15em;
-    border-radius: 0.75em;
-    color: #00ffa8;
-    font-size: 1.1rem;
-    font-weight: 700;
-    cursor: pointer;
-    overflow: hidden;
-    transition: border 300ms ease, color 300ms ease;
-    user-select: none;
-    min-width: 180px;
-    height: 48px;
-    box-sizing: border-box;
-  }
+button {
+  all: unset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 12px 24px;
+  border: 0.15em solid #00ffa8;
+  border-radius: 1px;
+  color: #00ffa8;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border 300ms ease, color 300ms ease, box-shadow 300ms ease, transform 150ms ease;
+  user-select: none;
+  min-width: 180px;
+  height: 48px;
+  box-sizing: border-box;
+  z-index: 0;
+}
 
-  button:focus-visible {
-    outline: 2px solid #00ffa8;
-    outline-offset: 4px;
-  }
-  
-  .button-container {
-    flex: 1 1 190px;
-    min-width: 180px;
-    position: relative;
-  }
+button:focus-visible {
+  outline: 1px solid #00ffa8;
+  outline-offset: 2px;
+}
 
-  button:hover {
-    color: #ffffff;
-  }
+.button-container {
+  flex: 1 1 190px;
+  min-width: 180px;
+  position: relative;
+}
 
-  button:active {
-    border-color: #00996a;
-  }
+button:hover {
+  color: #ffffff;
+  box-shadow: 0 0 12px #00ffa8aa;
+}
 
-  button::before,
-  button::after {
-    content: "";
-    position: absolute;
-    width: 8.5em;
-    aspect-ratio: 1;
-    background: #00ffa8;
-    opacity: 0.5;
-    border-radius: 50%;
-    transition: transform 500ms ease, background 300ms ease;
-  }
+button:active {
+  border-color: #00996a;
+  transform: scale(0.97);
+}
 
-  button::before {
-    left: 0;
-    transform: translateX(-8em);
-  }
+button::before,
+button::after {
+  content: "";
+  position: absolute;
+  width: 8.5em;
+  aspect-ratio: 1;
+  background: #00ffa8;
+  opacity: 0.5;
+  border-radius: 50%;
+  transition: transform 500ms ease, background 300ms ease;
+  pointer-events: none;  /* Prevent pseudo-elements from blocking pointer */
+  z-index: -1;  /* Send behind the button content */
+}
 
-  button::after {
-    right: 0;
-    transform: translateX(8em);
-  }
+button::before {
+  left: 0;
+  transform: translateX(-8em);
+}
 
-  button:hover::before {
-    transform: translateX(-1em);
-  }
+button::after {
+  right: 0;
+  transform: translateX(8em);
+}
 
-  button:hover::after {
-    transform: translateX(1em);
-  }
+button:hover::before {
+  transform: translateX(-1em);
+}
 
-  button:active::before,
-  button:active::after {
-    background: #00996a;
-  }
+button:hover::after {
+  transform: translateX(1em);
+}
 
-  button:disabled {
-    color: #555a61;
-    border-color: #333;
-    cursor: not-allowed;
-  }
+button:active::before,
+button:active::after {
+  background: #00996a;
+}
 
-  button:disabled::before,
-  button:disabled::after {
-    display: none;
-  }
+button:disabled {
+  color: #555a61;
+  border-color: #333;
+  cursor: not-allowed;
+}
+
+button:disabled::before,
+button:disabled::after {
+  display: none;
+}
 
   .vehicle-count {
     position: absolute;
@@ -350,16 +355,6 @@
     color: #ffffff;
     border-bottom: 1px solid #244352;
     text-align: center;
-  }
-
-  .output-container {
-    background-color: #141a20;
-    border-radius: 12px;
-    box-shadow: inset 0 0 14px rgb(97 239 206 / 0.4);
-    max-height: 400px;
-   overflow-x: hidden;
-    overflow-y: scroll;
-  resize: none;
   }
 
   pre {
@@ -539,33 +534,34 @@
           <button id="toggle-edit">✏️ Enable Edit</button>
           <div class="output-container">
            <textarea id="output" readonly spellcheck="false"
-  placeholder="-- Select a vehicle folder to generate Lua output"
-  style="
-    width: 100%;
-    height: 400px;
-    background:
-      repeating-linear-gradient(
-        to bottom,
-        #141a20,
-        #141a20 24px,
-        #1c2229 24px,
-        #1c2229 25px
-      );
-    color: #ffffff;
-    font-family: 'Fira Code', monospace;
-    font-size: 14px;
-    padding: 12px 16px;
-    border: none;
-    border-radius: 12px;
-    box-shadow: inset 0 0 14px rgba(97, 239, 206, 0.4);
-    overflow-x: hidden;
-    overflow-y: scroll;
-    line-height: 25px;
-    white-space: pre;
-    outline: none;
-    min-height: 100px;
-  "
-></textarea>
+                placeholder="-- Select a vehicle folder to generate Lua output"
+                style="
+                  width: 100%;
+                  height: 400px;
+                  
+                  background:
+                    repeating-linear-gradient(
+                      to bottom,
+                      #141a20,
+                      #141a20 24px,
+                      #1c2229 24px,
+                      #1c2229 25px
+                    );
+                  color: #ffffff;
+                  font-family: 'Fira Code', monospace;
+                  font-size: 14px;
+                  padding: 12px 16px;
+                  border: none;
+                  border-radius: 12px;
+                  box-shadow: inset 0 0 14px rgba(97, 239, 206, 0.4);
+                  overflow-x: hidden;
+                  overflow-y: scroll;
+                  line-height: 25px;
+                  white-space: pre;
+                  outline: none;
+                  min-height: 100px;
+                "
+              ></textarea>
 
 
           </div>
@@ -741,36 +737,34 @@
     });
 
     async function processFolder(dirHandle) {
-      for await (const entry of dirHandle.values()) {
-        if (entry.kind === 'file' && entry.name.match(/vehicles?\.meta$/i)) {
-          try {
-            const file = await entry.getFile();
-            const content = await file.text();
+        for await (const entry of dirHandle.values()) {
+            if (entry.kind === 'file' && entry.name.match(/vehicles?.meta/i)) {
+                const file = await entry.getFile();
+                const content = await file.text();
 
-            const models = [...content.matchAll(/<modelName>(.*?)<\/modelName>/g)].map(m => m[1]);
-            const brands = [...content.matchAll(/<vehicleMakeName>(.*?)<\/vehicleMakeName>/g)].map(m => m[1] || 'UNKNOWN');
-            const gameNames = [...content.matchAll(/<gameName>(.*?)<\/gameName>/g)].map(m => m[1]);
+                const models = [...content.matchAll(/<modelName>(.*?)<\/modelName>/g)].map(m => m[1]);
+                const brands = [...content.matchAll(/<vehicleMakeName>(.*?)<\/vehicleMakeName>/g)].map(m => m[1] || 'UNKNOWN');
+                const gameNames = [...content.matchAll(/<gameName>(.*?)<\/gameName>/g)].map(m => m[1]);
 
-            models.forEach((model, index) => {
-              const vehicle = {
-                model: model,
-                brand: capitalize(brands[index] || 'UNKNOWN'),
-                name: gameNames[index] || model,
-                price: parseInt(defaultPrice.value) || 100000,
-                category: defaultCategory.value || "super",
-                type: defaultType.value || "automobile",
-                shop: defaultShop.value || "pdm",
-                class: includeClass.checked ? (defaultClass.value || undefined) : undefined
-              };
-              vehiclesData.push(vehicle);
-            });
-          } catch (error) {
-            console.error(`Error processing file ${entry.name}:`, error);
-          }
-        } else if (entry.kind === 'directory') {
-          await processFolder(entry);
+                models.forEach((model, index) => {
+                    const vehicle = {
+                        model,
+                        brand: capitalize(brands[index] || 'UNKNOWN'),
+                        name: gameNames[index] || model,
+                        price: parseInt(defaultPrice.value),
+                        category: defaultCategory.value,
+                        type: defaultType.value,
+                        shop: defaultShop.value
+                    };
+                    vehiclesData.push(vehicle);
+                });
+
+                refreshPreviewTable();
+                updateVehicleCount();
+            } else if (entry.kind === 'directory') {
+                await processFolder(entry);
+            }
         }
-      }
     }
 
 
